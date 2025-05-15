@@ -37,9 +37,14 @@ clipLag: how long you would like the "clipping" indicator to show
 
 Access the clipping through node.checkClipping(); use node.shutdown to get rid of it.
 */
+const tabRMS = [];
+
 
 function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
-	var processor = audioContext.createScriptProcessor(512);
+    var processor = audioContext.createScriptProcessor(512);
+    
+	console.log("processor : ", processor);
+    
 	processor.onaudioprocess = volumeAudioProcess;
 	processor.clipping = false;
 	processor.lastClip = 0;
@@ -47,31 +52,32 @@ function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
 	processor.clipLevel = clipLevel || 0.98;
 	processor.averaging = averaging || 0.95;
 	processor.clipLag = clipLag || 750;
-
+    
 	// this will have no effect, since we don't copy the input to the output,
 	// but works around a current Chrome bug.
 	processor.connect(audioContext.destination);
-
+    
 	processor.checkClipping =
-		function(){
-			if (!this.clipping)
-				return false;
-			if ((this.lastClip + this.clipLag) < window.performance.now())
-				this.clipping = false;
-			return this.clipping;
-		};
-
+    function(){
+        if (!this.clipping)
+            return false;
+        if ((this.lastClip + this.clipLag) < window.performance.now())
+            this.clipping = false;
+        return this.clipping;
+    };
+    
 	processor.shutdown =
-		function(){
-			this.disconnect();
-			this.onaudioprocess = null;
-		};
-
+    function(){
+        this.disconnect();
+        this.onaudioprocess = null;
+    };
+    
 	return processor;
 }
 
+
 function volumeAudioProcess( event ) {
-	var buf = event.inputBuffer.getChannelData(0);
+    var buf = event.inputBuffer.getChannelData(0);
     var bufLength = buf.length;
 	var sum = 0;
     var x;
@@ -89,8 +95,33 @@ function volumeAudioProcess( event ) {
     // ... then take the square root of the sum.
     var rms =  Math.sqrt(sum / bufLength);
 
+	// console.log("rms :" , rms);
     // Now smooth this out with the averaging factor applied
     // to the previous sample - take the max here because we
     // want "fast attack, slow release."
     this.volume = Math.max(rms, this.volume*this.averaging);
+	console.log("volume :" , this.volume);
+	
+	
+    for (var i=0; i<bufLength; i++) {
+		tabRMS.push(rms);
+	};
+
+	// const valuemax = Math.max(...tabRMS);
+	// // console.log("tabRMS :" , tabRMS);
+	// console.log("tabRMS :" , tabRMS);
+	// console.log("valuemax :" , valuemax);
+
+	// volumeValue = this.volume;
+    // console.log("volumeValue in vol : ", volumeValue);
+
+	return tabRMS;
+
+}
+
+function calculerMax (tabRMS) {
+    const valuemax = Math.max(...tabRMS);
+	console.log("max value", valuemax);
+
+    return valuemax;
 }
