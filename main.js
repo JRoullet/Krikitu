@@ -8,7 +8,6 @@ var rafID = null;
 var mediaStreamSource = null;
 var counter = 4;
 var intervalId = null;
-var volumeValue = 0;
 let tabRMS = [];
 let valuemax = 0;
 
@@ -247,11 +246,10 @@ function volumeAudioProcess( event ) {
 }
 
 function calculerMax (tabRMS) {
-    valuemax = Math.max(...tabRMS);
-    valuemax *= 100;
-    valuemax = valuemax.toFixed(2);
-	console.log("max value", valuemax);
-    valuemax = Math.trunc(valuemax * 100 ) /100;
+    valuemax = (100*Math
+        .max(...tabRMS))
+        .toFixed(2)
+    ;
 	console.log("max value1", valuemax);
     return valuemax;
 }
