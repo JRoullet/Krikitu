@@ -269,11 +269,10 @@ function volumeAudioProcess( event ) {
 }
 
 function calculerMax (tabRMS) {
-    valuemax = Math.max(...tabRMS);
-    valuemax *= 100;
-    valuemax = valuemax.toFixed(2);
-	console.log("max value", valuemax);
-    valuemax = Math.trunc(valuemax * 100 ) /100;
+    valuemax = (100*Math
+        .max(...tabRMS))
+        .toFixed(2)
+    ;
 	console.log("max value1", valuemax);
     return valuemax;
 }
