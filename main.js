@@ -1,14 +1,14 @@
 
-var audioContext = null;
-var meter = null;
-var canvasContext = null;
-var WIDTH=500;
-var HEIGHT=50;
-var rafID = null;
-var mediaStreamSource = null;
-var counter = 4;
-var intervalId = null;
-var volumeValue = 0;
+let audioContext = null;
+let meter = null;
+let canvasContext = null;
+const WIDTH=500;
+const HEIGHT=50;
+let rafID = null;
+let mediaStreamSource = null;
+let counter = 4;
+let intervalId = null;
+let volumeValue = 0;
 let tabRMS = [];
 let valuemax = 0;
 
