@@ -9,7 +9,8 @@ var mediaStreamSource = null;
 var counter = 4;
 var intervalId = null;
 var volumeValue = 0;
-const tabRMS = [];
+let tabRMS = [];
+let valuemax = 0;
 
 function main () {
 
@@ -95,7 +96,7 @@ function createUser (event) {
     document.querySelector("#user").value = "";
     
     // On clone la div template pour chaque user crée
-    const scrollTask = document.querySelector(".scrollTask");
+    const scrollUser = document.querySelector(".scrollUser");
     const template = document.querySelector(".post-template");
     
     const cloneTemplate = template.content.cloneNode(true);
@@ -112,19 +113,41 @@ function createUser (event) {
     // const meter = cloneTemplate.querySelector("#meter");
     
     // cloneTemplate est un enfant de scrollTask
-    scrollTask.appendChild(cloneTemplate);
+    scrollUser.appendChild(cloneTemplate);
     
 }
+
+function createResult () {
+    // event.preventDefault();
+
+    const result = valuemax;
+    console.log("value max :", result);
+
+    const scrollResult = document.querySelector(".scrollResult");
+    const template = document.querySelector(".templateResult");
+    
+    const cloneTemplate = template.content.cloneNode(true);
+    
+    const resultDIV = cloneTemplate.querySelector("#resultUser");
+    resultDIV.textContent = result;
+
+    scrollResult.appendChild(cloneTemplate);
+
+}
+
 
 function finish() {
     clearInterval(intervalId);
     stopMeter();
-    document.getElementById("bip").innerHTML = "TERMINE!";	
+    document.getElementById("bip").innerHTML = "TERMINE!";
+    // On reinitilise le compteur pour restart 
+    counter = 4;
 }
 
 function bip() {
     counter--;
     if(counter <= 0) finish();
+
     else {	
         document.getElementById("bip").innerHTML = counter + " secondes restantes";
     }	
@@ -139,6 +162,9 @@ function stopMeter () {
     console.log("score : ", audioContext);
     audioContext = audioContext.close();
     calculerMax(tabRMS); 
+    createResult();
+    tabRMS = [];
+
 } 
 
 function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
@@ -221,8 +247,11 @@ function volumeAudioProcess( event ) {
 }
 
 function calculerMax (tabRMS) {
-    const valuemax = Math.max(...tabRMS);
+    valuemax = Math.max(...tabRMS);
+    valuemax *= 100;
+    valuemax = valuemax.toFixed(2);
 	console.log("max value", valuemax);
-
+    valuemax = Math.trunc(valuemax * 100 ) /100;
+	console.log("max value1", valuemax);
     return valuemax;
 }
