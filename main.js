@@ -113,7 +113,29 @@ function createUser (event) {
     // const meter = cloneTemplate.querySelector("#meter");
     
     // cloneTemplate est un enfant de scrollTask
+
     scrollUser.appendChild(cloneTemplate);
+
+    const newUser = {
+    name : user,
+    };
+
+    const options = {
+        method : "POST",
+        headers : new Headers ({
+            "Content-Type" : "application/json",
+        }),
+        body : JSON.stringify(newUser),
+    };
+    
+    // J'envoi la requête HTTP pour créer un produit
+    fetch("http://localhost:3000/", options)
+    .then(
+        response => response.json())
+    .then(data => {
+        console.log("data reçue :", data);
+    })
+    .catch(err => console.log(err));
     
 }
 
@@ -254,4 +276,25 @@ function calculerMax (tabRMS) {
     valuemax = Math.trunc(valuemax * 100 ) /100;
 	console.log("max value1", valuemax);
     return valuemax;
+}
+
+function POSTnewProduct() {
+    const options = {
+        method : "POST",
+        headers : new Headers ({
+            "Content-Type" : "application/json",
+        }),
+        body : JSON.stringify(newProduct),
+    };
+    
+    console.log(options);
+
+    // J'envoi la requête HTTP pour créer un produit
+    fetch("http://0.0.0.0:4004/new-product", options)
+    .then(
+        response => response.json())
+    .then(data => {
+        console.log("data reçue :", data);
+    })
+    .catch(err => console.log(err));
 }
