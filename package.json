@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
+    "nodemon": "^1.18.10",
+    "remedial": "^1.0.8",
+    "sequelize": "^6.37.7"
+  },
+  "name": "volume-meter-main",
+  "version": "1.0.0",
+  "description": "I whipped this app up to show a basic volume meter on live audio input.  It does both clip detection and RMS volume.",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon serveur.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JRoullet/Krikitu.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JRoullet/Krikitu/issues"
+  },
+  "homepage": "https://github.com/JRoullet/Krikitu#readme"
+}
